@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="16" viewBox="0 0 48 16" shape-rendering="crispEdges">
+<rect width="48" height="16" fill="none"/>
+<!-- frame 0 -->
+<g transform="translate(0)"><rect x="5" y="2" width="6" height="6" fill="#b47b5e"/><rect x="3" y="1" width="10" height="3" fill="#c5a46d"/><rect x="4" y="8" width="8" height="7" fill="#172033"/><rect x="4" y="14" width="3" height="2" fill="#d8c39b"/><rect x="9" y="14" width="3" height="2" fill="#d8c39b"/></g>
+<!-- frame 1 -->
+<g transform="translate(16)"><rect x="5" y="2" width="6" height="6" fill="#b47b5e"/><rect x="3" y="1" width="10" height="3" fill="#c5a46d"/><rect x="4" y="8" width="8" height="6" fill="#172033"/><rect x="3" y="14" width="3" height="2" fill="#d8c39b"/><rect x="9" y="13" width="3" height="3" fill="#d8c39b"/></g>
+<!-- frame 2 attack -->
+<g transform="translate(32)"><rect x="5" y="2" width="6" height="6" fill="#b47b5e"/><rect x="3" y="1" width="10" height="3" fill="#c5a46d"/><rect x="4" y="8" width="8" height="7" fill="#172033"/><rect x="4" y="14" width="3" height="2" fill="#d8c39b"/><rect x="9" y="14" width="3" height="2" fill="#d8c39b"/><rect x="12" y="7" width="4" height="2" fill="#f1dfad"/></g>
+</svg>
