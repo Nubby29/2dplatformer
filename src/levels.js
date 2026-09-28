@@ -28,6 +28,15 @@ export const LEVELS={
       {x:438,y:109,type:"soldier"},{x:574,y:115,type:"archer"},{x:660,y:89,type:"soldier"},
       {x:780,y:115,type:"soldier"},{x:914,y:115,type:"archer"}
     ],
-    checkpoint:{x:520,y:146}
+    checkpoint:{x:520,y:146},
+    movingPlatforms:[
+      {x:650,y:78,w:38,h:8,startX:650,startY:78,range:34,speed:1.2,phase:0},
+      {x:860,y:84,w:38,h:8,startX:860,startY:84,range:26,speed:1.5,phase:1.4}
+    ],
+    barriers:[
+      {x:604,y:140,w:10,h:24,hp:2,alive:true},
+      {x:826,y:140,w:10,h:24,hp:2,alive:true}
+    ],
+    horseSequence:{x:900,y:116,w:26,h:28}
   }
 };

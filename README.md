@@ -1,5 +1,20 @@
 # EPIC: The Musical — Pixel Odyssey
 
+## Phase 6 — Troy gameplay depth
+
+Expanded the first song level with mechanics that make the stage feel more like a complete platforming level rather than a combat prototype.
+
+Added:
+
+- Moving platforms with vertical/horizontal motion.
+- Breakable wooden barriers with two-hit durability.
+- Enemy death animation timing and improved hit feedback.
+- A dedicated Troy horse visual sequence near the eastern gate.
+- Moving platforms are integrated into player collision.
+- Additional level-specific progression messaging.
+
+The level remains playable without external audio or copyrighted lyrics/recordings.
+
 A 2D pixel platformer inspired by Homer's *Odyssey* and structured around the nine sagas of **EPIC: The Musical** by Jorge Rivera-Herrans.
 
 ## Phase 5 — pixel-art asset pipeline

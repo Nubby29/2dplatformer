@@ -29,7 +29,8 @@ function resetLevel(){
  const level=LEVELS["troy-01"];
  game={time:0,cameraX:0,cameraShake:0,won:false,checkpointReached:false,level,
  player:createPlayer(level.spawn),checkpoint:{...level.spawn},
- enemies:level.enemies.map(e=>({...e,w:10,h:e.type==="archer"?16:17,vx:0,alive:true,shotCooldown:1.2})),
+ enemies:level.enemies.map(e=>({...e,w:10,h:e.type==="archer"?16:17,vx:0,alive:true,shotCooldown:1.2,attackCooldown:0,deathTimer:0})),
+ movingPlatforms:level.movingPlatforms.map(p=>({...p})),barriers:level.barriers.map(b=>({...b})),horseSequence:{...level.horseSequence,active:false},
  particles:[],projectiles:[],debris:level.debris.map(d=>({...d,falling:false,vy:0,active:true})),
  story:createStory(),section:"Burning Battlefield"};
  levelName.textContent="Troy Saga • The Horse and the Infant";healthText.textContent="♥♥♥";
@@ -69,8 +70,8 @@ function update(dt){
  if(jump&&!jumpWasDown&&p.onGround){p.vy=CONFIG.jumpVelocity;p.onGround=false}
  if(attack&&!attackWasDown&&p.attack<=0)p.attack=.24;
  jumpWasDown=jump;attackWasDown=attack;
- p.vy+=CONFIG.gravity;moveAndCollide(p,game.level.platforms);
- updateHazards(dt);updateDebris();updateProjectiles(dt);
+ p.vy+=CONFIG.gravity;moveAndCollide(p,[...game.level.platforms,...game.movingPlatforms]);
+ updateMovingPlatforms();updateHazards(dt);updateDebris();updateProjectiles(dt);updateBarriers(dt);
  for(const e of game.enemies)updateEnemy(e,dt);
  if(p.y>190){respawn();return}
  if(!game.checkpointReached&&p.x>=game.level.checkpoint.x){
@@ -82,6 +83,16 @@ function update(dt){
  game.cameraX=Math.max(0,Math.min(game.level.width-320,p.x-90));
  for(const part of game.particles){part.x+=part.vx;part.y+=part.vy;part.vy+=.03;part.life-=dt}
  game.particles=game.particles.filter(p=>p.life>0);
+}
+function updateMovingPlatforms(){
+ for(const p of game.movingPlatforms){p.phase+=p.speed*.025;p.x=p.startX+Math.sin(p.phase)*p.range;p.y=p.startY+Math.sin(p.phase*1.7)*8}
+}
+function updateBarriers(dt){
+ const p=game.player;
+ for(const b of game.barriers){if(!b.alive)continue;
+   if(rectsOverlap(p,b)&&p.attack>0){b.hp--;p.vx=(p.x<b.x?-1:1)*.6;burst(b.x+5,b.y+8);if(b.hp<=0){b.alive=false;showMessage("BARRIER BROKEN")}}
+   else if(rectsOverlap(p,b)){p.x=p.x<b.x?b.x-p.w:b.x+b.w}
+ }
 }
 function updateSection(){
  let next=game.level.sections[0].name;
@@ -145,9 +156,9 @@ function draw(){
  drawSky();drawRuins(cam);
  ctx.fillStyle="#31425a";ctx.fillRect(0,148,320,32);
  for(const pl of game.level.platforms)drawPlatform(pl,cam);
- drawHazards(cam);drawCheckpoint(cam);drawGoal(cam);
+ drawHazards(cam);drawCheckpoint(cam);drawGoal(cam);drawMovingPlatforms(cam);drawBarriers(cam);drawHorseSequence(cam);
  for(const d of game.debris)if(d.active)drawDebris(d,cam);
- for(const e of game.enemies)if(e.alive)drawEnemy(e,cam);
+ for(const e of game.enemies)drawEnemy(e,cam);
  for(const b of game.projectiles){ctx.fillStyle="#e0ad62";ctx.fillRect(Math.floor(b.x-cam),Math.floor(b.y),4,2)}
  drawPlayer(cam);
  for(const part of game.particles){ctx.fillStyle=part.kind==="hit"?"#f1dfad":"#e0ad62";ctx.fillRect(Math.floor(part.x-cam),Math.floor(part.y),part.size||2,part.size||2)}
@@ -179,12 +190,13 @@ function drawDebris(d,cam){const x=Math.floor(d.x-cam);ctx.fillStyle="#665047";c
 function drawEnemy(e,cam){
  const x=Math.floor(e.x-cam),frame=Math.floor(game.time*8)%2;
  const sprite=ASSETS[e.type==="archer"?"archer":"soldier"];
+ ctx.save();if(!e.alive)ctx.globalAlpha=Math.max(0,e.deathTimer/.35);
  if(!drawSprite(ctx,sprite,frame,x,e.y,16,17,e.vx<0)) {
    ctx.fillStyle="#161a25";ctx.fillRect(x+2,e.y+5,7,12);
    ctx.fillStyle=e.type==="archer"?"#526b54":"#a96c54";ctx.fillRect(x+2,e.y-frame,7,7);
    ctx.fillStyle="#d6c29c";ctx.fillRect(x+3,e.y+1-frame,5,2);
  }
- if(e.type==="archer"){ctx.strokeStyle="#e0ad62";ctx.beginPath();ctx.moveTo(x+8,e.y+6);ctx.lineTo(x+5,e.y+9);ctx.stroke()}
+ if(!e.alive){ctx.restore();return}\n if(e.type==="archer"){ctx.strokeStyle="#e0ad62";ctx.beginPath();ctx.moveTo(x+8,e.y+6);ctx.lineTo(x+5,e.y+9);ctx.stroke()}
 }
 function drawPlayer(cam){
  const p=game.player,px=Math.floor(p.x-cam);
