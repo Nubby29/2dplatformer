@@ -2,6 +2,10 @@
 
 A 2D pixel platformer inspired by Homer's *Odyssey* and structured around the nine sagas of **EPIC: The Musical** by Jorge Rivera-Herrans.
 
+## Phase 4 — Troy visual and combat polish
+
+Added camera shake and brighter hit-particle feedback to make combat and hazards feel more responsive.
+
 ## Phase 3 — Troy story level
 
 **Troy Saga — The Horse and the Infant** is now an authored multi-section level rather than a single prototype room.
