@@ -1,16 +1,33 @@
-// Phase 2 — reusable song-level definitions.
+// Phase 3 — authored Troy sections, hazards and enemy variety.
 export const LEVELS={
   "troy-01":{
-    saga:"Troy Saga",song:"The Horse and the Infant",width:760,
-    spawn:{x:28,y:120},goal:{x:724,y:120,w:10,h:44},
+    saga:"Troy Saga",song:"The Horse and the Infant",width:980,
+    spawn:{x:28,y:120},goal:{x:944,y:120,w:10,h:44},
+    sections:[
+      {x:0,name:"Burning Battlefield"},{x:250,name:"Ruined Streets"},
+      {x:520,name:"The Eastern Wall"},{x:760,name:"Road to the Gate"}
+    ],
     platforms:[
-      {x:0,y:164,w:180,h:16},{x:208,y:164,w:170,h:16},{x:402,y:164,w:174,h:16},{x:600,y:164,w:160,h:16},
-      {x:76,y:136,w:48,h:8},{x:152,y:118,w:48,h:8},{x:238,y:136,w:48,h:8},{x:300,y:108,w:48,h:8},
-      {x:420,y:132,w:52,h:8},{x:500,y:110,w:48,h:8},{x:610,y:136,w:48,h:8},{x:674,y:106,w:40,h:8}
+      {x:0,y:164,w:170,h:16},{x:194,y:164,w:168,h:16},{x:390,y:164,w:112,h:16},
+      {x:532,y:164,w:166,h:16},{x:730,y:164,w:118,h:16},{x:878,y:164,w:102,h:16},
+      {x:72,y:136,w:48,h:8},{x:142,y:112,w:46,h:8},{x:222,y:136,w:54,h:8},
+      {x:300,y:108,w:50,h:8},{x:420,y:126,w:48,h:8},{x:476,y:96,w:42,h:8},
+      {x:558,y:132,w:50,h:8},{x:640,y:106,w:48,h:8},{x:754,y:132,w:46,h:8},
+      {x:812,y:104,w:44,h:8},{x:894,y:132,w:44,h:8}
+    ],
+    hazards:[
+      {x:170,y:158,w:24,h:6,type:"fire"},{x:362,y:158,w:28,h:6,type:"fire"},
+      {x:502,y:158,w:30,h:6,type:"fire"},{x:698,y:158,w:32,h:6,type:"fire"},
+      {x:848,y:158,w:30,h:6,type:"fire"}
+    ],
+    debris:[
+      {x:276,y:70,w:10,h:10},{x:690,y:58,w:10,h:10},{x:842,y:66,w:10,h:10}
     ],
     enemies:[
-      {x:112,y:119,type:"soldier"},{x:270,y:119,type:"soldier"},{x:438,y:115,type:"soldier"},{x:630,y:119,type:"soldier"}
+      {x:104,y:119,type:"soldier"},{x:250,y:119,type:"soldier"},{x:326,y:91,type:"archer"},
+      {x:438,y:109,type:"soldier"},{x:574,y:115,type:"archer"},{x:660,y:89,type:"soldier"},
+      {x:780,y:115,type:"soldier"},{x:914,y:115,type:"archer"}
     ],
-    checkpoint:{x:380,y:146}
+    checkpoint:{x:520,y:146}
   }
 };
