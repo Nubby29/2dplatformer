@@ -2,32 +2,30 @@
 
 A 2D pixel platformer inspired by Homer's *Odyssey* and structured around the nine sagas of **EPIC: The Musical** by Jorge Rivera-Herrans.
 
-## Phase 1
+## Phase 3 — Troy story level
 
-The first prototype implements:
+**Troy Saga — The Horse and the Infant** is now an authored multi-section level rather than a single prototype room.
 
-- Crisp 320×180 pixel canvas scaled responsively.
-- Title screen and playable game screen.
-- Odysseus movement, gravity, jumping and platform collision.
-- Directional attack.
-- Enemy chase and defeat behavior.
-- Player health, damage, invulnerability and restart.
-- Goal and level completion.
-- Procedural placeholder pixel art with no external asset dependency.
-- Complete 9-saga / 40-song progression data model.
+Added:
 
-### Current playable level
-
-**Troy Saga — The Horse and the Infant**
-
-The prototype uses original gameplay text and does not bundle song lyrics or recordings. Licensed/user-provided music can be integrated later.
+- Original opening cinematic dialogue before gameplay.
+- Four named Troy sections with progress transitions.
+- Burning-floor hazards.
+- Falling debris hazards.
+- Soldier and archer enemy behaviors.
+- Simple ranged projectiles.
+- Mid-level checkpoint and respawn flow.
+- Expanded ruined-city / battlefield procedural pixel scenery.
+- Section-aware HUD messaging.
+- Original story text only; no song lyrics or recordings are bundled.
 
 ## Controls
 
 - **A / D** or **Left / Right** — move
 - **Space / W / Up** — jump
-- **J** — attack
-- **R** — restart
+- **J** or **K** — attack
+- **Space / Enter** — advance story dialogue
+- **R** — restart during gameplay
 
 ## Saga roadmap
 
@@ -45,12 +43,10 @@ The prototype uses original gameplay text and does not bundle song lyrics or rec
 
 ## Local run
 
-Because this uses JavaScript modules, serve the repository with a local HTTP server instead of opening the HTML file directly:
+Because this uses JavaScript modules, serve the repository with a local HTTP server:
 
     python -m http.server 8000
 
 Then open http://localhost:8000.
 
-## Development rule
-
-Each phase should leave the game playable. Later phases will replace procedural placeholder art with dedicated pixel assets, expand level systems, add story/cutscenes and audio hooks, introduce enemies/bosses, and implement the remaining song levels.
+Each development phase should leave the game playable. Dedicated pixel assets, audio hooks, bosses and the remaining song levels will be added in later phases.
