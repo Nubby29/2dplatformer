@@ -72,7 +72,8 @@ function update(dt){
  jumpWasDown=jump;attackWasDown=attack;
  p.vy+=CONFIG.gravity;moveAndCollide(p,[...game.level.platforms,...game.movingPlatforms]);
  updateMovingPlatforms();updateHazards(dt);updateDebris();updateProjectiles(dt);updateBarriers(dt);
- updateAmbushes();\n for(const e of game.enemies)updateEnemy(e,dt);
+ updateAmbushes();
+ for(const e of game.enemies)updateEnemy(e,dt);
  if(p.y>190){respawn();return}
  if(!game.checkpointReached&&p.x>=game.level.checkpoint.x){
    game.checkpointReached=true;game.checkpoint={x:game.level.checkpoint.x,y:game.level.checkpoint.y};
@@ -154,7 +155,8 @@ function updateEnemy(e,dt){
  if(p.attack>0&&Math.abs((p.x+p.w/2)-(e.x+e.w/2))<22&&Math.abs(p.y-e.y)<20){
    e.alive=false;burst(e.x+5,e.y+8);return
  }
- if(rectsOverlap(p,e)&&e.attackCooldown<=0){damagePlayer(e.x<p.x?1:-1);e.attackCooldown=.8;e.vx=e.x<p.x?-.8:.8;}\n if(e.attackCooldown>0)e.attackCooldown-=dt;
+ if(rectsOverlap(p,e)&&e.attackCooldown<=0){damagePlayer(e.x<p.x?1:-1);e.attackCooldown=.8;e.vx=e.x<p.x?-.8:.8;}
+ if(e.attackCooldown>0)e.attackCooldown-=dt;
 }
 function burst(x,y){game.cameraShake=Math.max(game.cameraShake,2.5);for(let i=0;i<10;i++)game.particles.push({x,y,vx:(Math.random()-.5)*2.4,vy:(Math.random()-1.2)*2,life:.5,size:2,kind:"hit"})}
 function draw(){
@@ -204,7 +206,8 @@ function drawEnemy(e,cam){
    ctx.fillStyle=e.type==="archer"?"#526b54":"#a96c54";ctx.fillRect(x+2,e.y-frame,7,7);
    ctx.fillStyle="#d6c29c";ctx.fillRect(x+3,e.y+1-frame,5,2);
  }
- if(!e.alive){ctx.restore();return}\n if(e.type==="archer"){ctx.strokeStyle="#e0ad62";ctx.beginPath();ctx.moveTo(x+8,e.y+6);ctx.lineTo(x+5,e.y+9);ctx.stroke()}
+ if(!e.alive){ctx.restore();return}
+ if(e.type==="archer"){ctx.strokeStyle="#e0ad62";ctx.beginPath();ctx.moveTo(x+8,e.y+6);ctx.lineTo(x+5,e.y+9);ctx.stroke()}
 }
 function drawPlayer(cam){
  const p=game.player,px=Math.floor(p.x-cam);
