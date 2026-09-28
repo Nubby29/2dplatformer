@@ -1,5 +1,16 @@
 # EPIC: The Musical — Pixel Odyssey
 
+## Phase 7 — Troy combat encounters
+
+Expanded combat and platforming encounters in the first Troy song level.
+
+Added:
+- Triggered enemy ambushes in multiple sections.
+- More responsive soldier pursuit and melee attacks.
+- Additional elevated combat platforms.
+- Combat-focused progression moments and HUD controls.
+- Phase 7 labeling and documentation.
+
 ## Phase 6 — Troy gameplay depth
 
 Expanded the first song level with mechanics that make the stage feel more like a complete platforming level rather than a combat prototype.

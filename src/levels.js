@@ -37,6 +37,7 @@ export const LEVELS={
       {x:604,y:140,w:10,h:24,hp:2,alive:true},
       {x:826,y:140,w:10,h:24,hp:2,alive:true}
     ],
-    horseSequence:{x:900,y:116,w:26,h:28}
+    horseSequence:{x:900,y:116,w:26,h:28},
+    ambushes:[{x:285,trigger:260},{x:700,trigger:675},{x:890,trigger:865}]
   }
 };
