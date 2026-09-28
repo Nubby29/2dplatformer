@@ -70,7 +70,7 @@ function update(dt){
  if(jump&&!jumpWasDown&&p.onGround){p.vy=CONFIG.jumpVelocity;p.onGround=false}
  if(attack&&!attackWasDown&&p.attack<=0)p.attack=.24;
  jumpWasDown=jump;attackWasDown=attack;
- p.vy+=CONFIG.gravity;moveAndCollide(p,game.level.platforms);
+ p.vy+=CONFIG.gravity;moveAndCollide(p,[...game.level.platforms,...game.movingPlatforms]);
  updateMovingPlatforms();updateHazards(dt);updateDebris();updateProjectiles(dt);updateBarriers(dt);
  for(const e of game.enemies)updateEnemy(e,dt);
  if(p.y>190){respawn();return}
@@ -190,13 +190,13 @@ function drawDebris(d,cam){const x=Math.floor(d.x-cam);ctx.fillStyle="#665047";c
 function drawEnemy(e,cam){
  const x=Math.floor(e.x-cam),frame=Math.floor(game.time*8)%2;
  const sprite=ASSETS[e.type==="archer"?"archer":"soldier"];
- if(!e.alive){ctx.globalAlpha=Math.max(0,e.deathTimer/.35);}
+ ctx.save();if(!e.alive)ctx.globalAlpha=Math.max(0,e.deathTimer/.35);
  if(!drawSprite(ctx,sprite,frame,x,e.y,16,17,e.vx<0)) {
    ctx.fillStyle="#161a25";ctx.fillRect(x+2,e.y+5,7,12);
    ctx.fillStyle=e.type==="archer"?"#526b54":"#a96c54";ctx.fillRect(x+2,e.y-frame,7,7);
    ctx.fillStyle="#d6c29c";ctx.fillRect(x+3,e.y+1-frame,5,2);
  }
- if(!e.alive){ctx.globalAlpha=1;return}\n if(e.type==="archer"){ctx.strokeStyle="#e0ad62";ctx.beginPath();ctx.moveTo(x+8,e.y+6);ctx.lineTo(x+5,e.y+9);ctx.stroke()}
+ if(!e.alive){ctx.restore();return}\n if(e.type==="archer"){ctx.strokeStyle="#e0ad62";ctx.beginPath();ctx.moveTo(x+8,e.y+6);ctx.lineTo(x+5,e.y+9);ctx.stroke()}
 }
 function drawPlayer(cam){
  const p=game.player,px=Math.floor(p.x-cam);
