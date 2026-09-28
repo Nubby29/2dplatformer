@@ -144,7 +144,7 @@ function draw(){
  if(game&&game.cameraShake>0){ctx.save();ctx.translate((Math.random()-.5)*game.cameraShake,(Math.random()-.5)*game.cameraShake)}
  drawSky();drawRuins(cam);
  ctx.fillStyle="#31425a";ctx.fillRect(0,148,320,32);
- for(const pl of game.level.platforms){const x=Math.floor(pl.x-cam);ctx.fillStyle="#60452f";ctx.fillRect(x,pl.y,pl.w,pl.h);ctx.fillStyle="#8b6a42";ctx.fillRect(x,pl.y,pl.w,3)}
+ for(const pl of game.level.platforms)drawPlatform(pl,cam);
  drawHazards(cam);drawCheckpoint(cam);drawGoal(cam);
  for(const d of game.debris)if(d.active)drawDebris(d,cam);
  for(const e of game.enemies)if(e.alive)drawEnemy(e,cam);
@@ -153,6 +153,18 @@ function draw(){
  for(const part of game.particles){ctx.fillStyle=part.kind==="hit"?"#f1dfad":"#e0ad62";ctx.fillRect(Math.floor(part.x-cam),Math.floor(part.y),part.size||2,part.size||2)}
  if(game.cameraShake>0){ctx.restore()}
  ctx.fillStyle="#f6e8c8";ctx.font="6px monospace";ctx.fillText("TROY",8,12);ctx.fillText(game.section.toUpperCase(),90,12);
+}
+function drawPlatform(pl,cam){
+ const x=Math.floor(pl.x-cam);
+ if(ASSETS.troyTiles&&pl.h>=16){
+   for(let tx=0;tx<pl.w;tx+=16){
+     const w=Math.min(16,pl.w-tx);
+     ctx.drawImage(ASSETS.troyTiles,0,0,w,16,x+tx,pl.y,w,16);
+   }
+ }else{
+   ctx.fillStyle="#60452f";ctx.fillRect(x,pl.y,pl.w,pl.h);
+   ctx.fillStyle="#8b6a42";ctx.fillRect(x,pl.y,pl.w,3);
+ }
 }
 function drawSky(){ctx.fillStyle="#29324a";ctx.fillRect(0,0,320,148);ctx.fillStyle="#4a4050";ctx.fillRect(0,52,320,18);ctx.fillStyle="#6a4540";ctx.fillRect(0,70,320,8)}
 function drawRuins(cam){
