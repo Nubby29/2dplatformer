@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>EPIC: The Musical — Pixel Odyssey</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main id="app">
+<section id="title-screen" class="screen">
+<p class="eyebrow">PHASE 3 • TROY SAGA</p>
+<h1>EPIC: THE MUSICAL</h1>
+<h2>PIXEL ODYSSEY</h2>
+<p class="subtitle">An Odyssey-inspired 2D pixel platformer</p>
+<button id="start-button">BEGIN THE JOURNEY</button>
+<p class="controls">A/D or ←/→ Move • Space/W Jump • J Attack • R Restart</p>
+</section>
+<section id="game-screen" class="screen hidden">
+<div class="hud"><span id="level-name">The Horse and the Infant</span><span id="health">♥♥♥</span></div>
+<canvas id="game" width="320" height="180" aria-label="Pixel platformer"></canvas>
+<div id="story-box" class="story-box hidden">
+<div id="story-speaker" class="story-speaker"></div>
+<div id="story-text" class="story-text"></div>
+<div class="story-hint">SPACE / ENTER</div>
+</div>
+<div id="message" class="message hidden"></div>
+</section>
+<section id="complete-screen" class="screen hidden">
+<p class="eyebrow">TROY SAGA • SONG 01</p>
+<h1>LEVEL COMPLETE</h1>
+<p id="complete-text">The road home has begun.</p>
+<button id="replay-button">PLAY AGAIN</button>
+</section>
+</main>
+<script type="module" src="src/main.js"></script>
+</body>
+</html>
