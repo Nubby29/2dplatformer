@@ -25,7 +25,7 @@ function startGame(){
 }
 function resetLevel(){
  const level=LEVELS["troy-01"];
- game={time:0,cameraX:0,won:false,checkpointReached:false,level,
+ game={time:0,cameraX:0,cameraShake:0,won:false,checkpointReached:false,level,
  player:createPlayer(level.spawn),checkpoint:{...level.spawn},
  enemies:level.enemies.map(e=>({...e,w:10,h:e.type==="archer"?16:17,vx:0,alive:true,shotCooldown:1.2})),
  particles:[],projectiles:[],debris:level.debris.map(d=>({...d,falling:false,vy:0,active:true})),
@@ -57,7 +57,7 @@ function updateStory(dt){
 }
 function update(dt){
  if(!game||game.won)return;
- game.time+=dt;
+ game.time+=dt;game.cameraShake=Math.max(0,game.cameraShake-dt*18);
  if(game.story.active){updateStory(dt);return}
  const p=game.player;p.invuln=Math.max(0,p.invuln-dt);p.attack=Math.max(0,p.attack-dt);
  const left=keys.has("a")||keys.has("arrowleft"),right=keys.has("d")||keys.has("arrowright");
@@ -135,10 +135,11 @@ function updateEnemy(e,dt){
  }
  if(rectsOverlap(p,e))damagePlayer(e.x<p.x?1:-1);
 }
-function burst(x,y){for(let i=0;i<10;i++)game.particles.push({x,y,vx:(Math.random()-.5)*2.4,vy:(Math.random()-1.2)*2,life:.5})}
+function burst(x,y){game.cameraShake=Math.max(game.cameraShake,2.5);for(let i=0;i<10;i++)game.particles.push({x,y,vx:(Math.random()-.5)*2.4,vy:(Math.random()-1.2)*2,life:.5,size:2,kind:"hit"})}
 function draw(){
  const cam=game.cameraX;ctx.clearRect(0,0,320,180);
  ctx.fillStyle="#18243a";ctx.fillRect(0,0,320,180);
+ if(game&&game.cameraShake>0){ctx.save();ctx.translate((Math.random()-.5)*game.cameraShake,(Math.random()-.5)*game.cameraShake)}
  drawSky();drawRuins(cam);
  ctx.fillStyle="#31425a";ctx.fillRect(0,148,320,32);
  for(const pl of game.level.platforms){const x=Math.floor(pl.x-cam);ctx.fillStyle="#60452f";ctx.fillRect(x,pl.y,pl.w,pl.h);ctx.fillStyle="#8b6a42";ctx.fillRect(x,pl.y,pl.w,3)}
@@ -147,7 +148,8 @@ function draw(){
  for(const e of game.enemies)if(e.alive)drawEnemy(e,cam);
  for(const b of game.projectiles){ctx.fillStyle="#e0ad62";ctx.fillRect(Math.floor(b.x-cam),Math.floor(b.y),4,2)}
  drawPlayer(cam);
- for(const part of game.particles){ctx.fillStyle="#e0ad62";ctx.fillRect(Math.floor(part.x-cam),Math.floor(part.y),2,2)}
+ for(const part of game.particles){ctx.fillStyle=part.kind==="hit"?"#f1dfad":"#e0ad62";ctx.fillRect(Math.floor(part.x-cam),Math.floor(part.y),part.size||2,part.size||2)}
+ if(game.cameraShake>0){ctx.restore()}
  ctx.fillStyle="#f6e8c8";ctx.font="6px monospace";ctx.fillText("TROY",8,12);ctx.fillText(game.section.toUpperCase(),90,12);
 }
 function drawSky(){ctx.fillStyle="#29324a";ctx.fillRect(0,0,320,148);ctx.fillStyle="#4a4050";ctx.fillRect(0,52,320,18);ctx.fillStyle="#6a4540";ctx.fillRect(0,70,320,8)}
