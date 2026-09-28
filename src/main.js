@@ -1,7 +1,8 @@
-// Phase 3 — authored Troy scene, hazards, enemy variety, checkpoints and original cutscene flow.
+// Phase 5 — pixel-art sprite sheets integrated with the Troy platformer.
 import { LEVELS } from "./levels.js";
 import { CONFIG,createPlayer,rectsOverlap,groundY,moveAndCollide } from "./engine.js";
 import { createStory,currentStoryLine,advanceStory } from "./story.js";
+import { ASSETS,loadAssets,drawSprite } from "./assets.js";
 
 const canvas=document.querySelector("#game"),ctx=canvas.getContext("2d");
 ctx.imageSmoothingEnabled=false;
@@ -19,8 +20,9 @@ window.addEventListener("keyup",e=>keys.delete(e.key.toLowerCase()));
 document.querySelector("#start-button").onclick=startGame;
 document.querySelector("#replay-button").onclick=startGame;
 
-function startGame(){
+async function startGame(){
  titleScreen.classList.add("hidden");completeScreen.classList.add("hidden");gameScreen.classList.remove("hidden");
+ await loadAssets();
  resetLevel();cancelAnimationFrame(animationId);last=performance.now();loop(performance.now());
 }
 function resetLevel(){
@@ -164,17 +166,24 @@ function drawGoal(cam){const gx=game.level.goal.x-cam;ctx.fillStyle="#d8c39b";ct
 function drawDebris(d,cam){const x=Math.floor(d.x-cam);ctx.fillStyle="#665047";ctx.fillRect(x,d.y,d.w,d.h);ctx.fillStyle="#9b715b";ctx.fillRect(x+2,d.y+2,5,4)}
 function drawEnemy(e,cam){
  const x=Math.floor(e.x-cam),frame=Math.floor(game.time*8)%2;
- ctx.fillStyle="#161a25";ctx.fillRect(x+2,e.y+5,7,12);ctx.fillStyle=e.type==="archer"?"#526b54":"#a96c54";ctx.fillRect(x+2,e.y-frame,7,7);
- ctx.fillStyle="#d6c29c";ctx.fillRect(x+3,e.y+1-frame,5,2);ctx.fillStyle="#5c2630";ctx.fillRect(x,e.y+7,10,2);
+ const sprite=ASSETS[e.type==="archer"?"archer":"soldier"];
+ if(!drawSprite(ctx,sprite,frame,x,e.y,16,17,e.vx<0)) {
+   ctx.fillStyle="#161a25";ctx.fillRect(x+2,e.y+5,7,12);
+   ctx.fillStyle=e.type==="archer"?"#526b54":"#a96c54";ctx.fillRect(x+2,e.y-frame,7,7);
+   ctx.fillStyle="#d6c29c";ctx.fillRect(x+3,e.y+1-frame,5,2);
+ }
  if(e.type==="archer"){ctx.strokeStyle="#e0ad62";ctx.beginPath();ctx.moveTo(x+8,e.y+6);ctx.lineTo(x+5,e.y+9);ctx.stroke()}
 }
 function drawPlayer(cam){
- const p=game.player,px=Math.floor(p.x-cam),frame=p.onGround&&Math.abs(p.vx)>.1?Math.floor(game.time*10)%2:0;
+ const p=game.player,px=Math.floor(p.x-cam);
+ const walking=p.onGround&&Math.abs(p.vx)>.1;
+ const frame=p.attack>0?2:(walking?Math.floor(game.time*10)%2:0);
  ctx.save();if(p.invuln>0&&Math.floor(game.time*18)%2===0)ctx.globalAlpha=.35;
- ctx.fillStyle="#172033";ctx.fillRect(px+2,p.y+7,7,9);ctx.fillStyle="#b47b5e";ctx.fillRect(px+2,p.y-frame,7,8);
- ctx.fillStyle="#c5a46d";ctx.fillRect(px+1,p.y+1-frame,9,3);ctx.fillStyle="#5e382c";ctx.fillRect(px+1,p.y+7,9,2);
- ctx.fillStyle="#d8c39b";ctx.fillRect(px+2,p.y+15,3,2+frame);ctx.fillRect(px+7,p.y+15,3,2+(1-frame));
- if(p.attack>0){ctx.fillStyle="#f1dfad";const ax=p.face>0?px+10:px-8;ctx.fillRect(ax,p.y+6,8,2);ctx.fillRect(ax+(p.face>0?6:-2),p.y+4,2,6)}
+ if(!drawSprite(ctx,ASSETS.player,frame,px,p.y,16,16,p.face<0)){
+   ctx.fillStyle="#172033";ctx.fillRect(px+2,p.y+7,7,9);
+   ctx.fillStyle="#b47b5e";ctx.fillRect(px+2,p.y,7,8);
+   ctx.fillStyle="#c5a46d";ctx.fillRect(px+1,p.y+1,9,3);
+ }
  ctx.restore();
 }
 function loop(now){const dt=Math.min(.033,(now-last)/1000);last=now;update(dt);draw();animationId=requestAnimationFrame(loop)}
