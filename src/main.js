@@ -32,7 +32,7 @@ function resetLevel(){
  enemies:level.enemies.map(e=>({...e,w:10,h:e.type==="archer"?16:17,vx:0,alive:true,shotCooldown:1.2,attackCooldown:0,deathTimer:0})),
  movingPlatforms:level.movingPlatforms.map(p=>({...p})),barriers:level.barriers.map(b=>({...b})),horseSequence:{...level.horseSequence,active:false},
  particles:[],projectiles:[],debris:level.debris.map(d=>({...d,falling:false,vy:0,active:true})),
- story:createStory(),section:"Burning Battlefield"};
+ story:createStory(),section:"Burning Battlefield",ambushes:level.ambushes.map(a=>({...a,triggered:false}))};
  levelName.textContent="Troy Saga • The Horse and the Infant";healthText.textContent="♥♥♥";
  storyAdvanceWasDown=false;storyBox.classList.remove("hidden");renderStory();
  showMessage("TROY — survive the ruins and reach the eastern gate.");
@@ -72,7 +72,7 @@ function update(dt){
  jumpWasDown=jump;attackWasDown=attack;
  p.vy+=CONFIG.gravity;moveAndCollide(p,[...game.level.platforms,...game.movingPlatforms]);
  updateMovingPlatforms();updateHazards(dt);updateDebris();updateProjectiles(dt);updateBarriers(dt);
- for(const e of game.enemies)updateEnemy(e,dt);
+ updateAmbushes();\n for(const e of game.enemies)updateEnemy(e,dt);
  if(p.y>190){respawn();return}
  if(!game.checkpointReached&&p.x>=game.level.checkpoint.x){
    game.checkpointReached=true;game.checkpoint={x:game.level.checkpoint.x,y:game.level.checkpoint.y};
@@ -92,6 +92,14 @@ function updateBarriers(dt){
  for(const b of game.barriers){if(!b.alive)continue;
    if(rectsOverlap(p,b)&&p.attack>0){b.hp--;p.vx=(p.x<b.x?-1:1)*.6;burst(b.x+5,b.y+8);if(b.hp<=0){b.alive=false;showMessage("BARRIER BROKEN")}}
    else if(rectsOverlap(p,b)){p.x=p.x<b.x?b.x-p.w:b.x+b.w}
+ }
+}
+function updateAmbushes(){
+ for(const a of game.ambushes){if(a.triggered||game.player.x<a.trigger)continue;
+   a.triggered=true;
+   const existing=game.enemies.filter(e=>e.alive).length;
+   if(existing<12){game.enemies.push({x:a.x,y:119,w:10,h:17,vx:0,alive:true,shotCooldown:.8,attackCooldown:0,deathTimer:0,type:"soldier"});}
+   burst(a.x,145);showMessage("TROY AMBUSH!");
  }
 }
 function updateSection(){
@@ -140,13 +148,13 @@ function updateEnemy(e,dt){
    }
    e.shotCooldown-=dt;
  }else{
-   e.vx=Math.abs(dx)<60?Math.sign(dx)*.38:0;e.x+=e.vx;
+   e.vx=Math.abs(dx)<72?Math.sign(dx)*.5:0;e.x+=e.vx;
    e.y=groundY(game.level.platforms,e.x,e.w,e.h);
  }
  if(p.attack>0&&Math.abs((p.x+p.w/2)-(e.x+e.w/2))<22&&Math.abs(p.y-e.y)<20){
    e.alive=false;burst(e.x+5,e.y+8);return
  }
- if(rectsOverlap(p,e))damagePlayer(e.x<p.x?1:-1);
+ if(rectsOverlap(p,e)&&e.attackCooldown<=0){damagePlayer(e.x<p.x?1:-1);e.attackCooldown=.8;e.vx=e.x<p.x?-.8:.8;}\n if(e.attackCooldown>0)e.attackCooldown-=dt;
 }
 function burst(x,y){game.cameraShake=Math.max(game.cameraShake,2.5);for(let i=0;i<10;i++)game.particles.push({x,y,vx:(Math.random()-.5)*2.4,vy:(Math.random()-1.2)*2,life:.5,size:2,kind:"hit"})}
 function draw(){
@@ -163,7 +171,7 @@ function draw(){
  drawPlayer(cam);
  for(const part of game.particles){ctx.fillStyle=part.kind==="hit"?"#f1dfad":"#e0ad62";ctx.fillRect(Math.floor(part.x-cam),Math.floor(part.y),part.size||2,part.size||2)}
  if(game.cameraShake>0){ctx.restore()}
- ctx.fillStyle="#f6e8c8";ctx.font="6px monospace";ctx.fillText("TROY",8,12);ctx.fillText(game.section.toUpperCase(),90,12);
+ ctx.fillStyle="#f6e8c8";ctx.font="6px monospace";ctx.fillText("TROY",8,12);ctx.fillText(game.section.toUpperCase(),90,12);ctx.fillText("A/D MOVE  SPACE JUMP  J ATTACK",8,176);
 }
 function drawPlatform(pl,cam){
  const x=Math.floor(pl.x-cam);
